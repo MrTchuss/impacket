@@ -275,13 +275,13 @@ class GetUserSPNs:
                 raise
 
         # Building the search filter
-        searchFilter = "(&(servicePrincipalName=*)(UserAccountControl:1.2.840.113556.1.4.803:=512)" \
-                       "(!(UserAccountControl:1.2.840.113556.1.4.803:=2))(!(objectCategory=computer))"
+        searchFilter = "(|(&(servicePrincipalName=*)(sAMAccountType:1.2.840.113556.1.4.302:=805306368)(!(objectCategory=computer)))(&(servicePrincipalName=*)(UserAccountControl:1.2.840.113556.1.4.803:=512)" \
+                       "(!(UserAccountControl:1.2.840.113556.1.4.803:=2))(!(objectCategory=computer))" \
 
         if self.__requestUser is not None:
-            searchFilter += '(sAMAccountName:=%s))' % self.__requestUser
+            searchFilter += '(sAMAccountName:=%s)))' % self.__requestUser
         else:
-            searchFilter += ')'
+            searchFilter += '))'
 
         try:
             resp = ldapConnection.search(searchFilter=searchFilter,
